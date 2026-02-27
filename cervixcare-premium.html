@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CervixCare+</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F7F4F0;--bg2:#EDE8E2;--surface:#FFFFFF;--surface2:#F2EDE8;
+  --border:#E2DDD8;--border2:#D0C8C0;
+  --text:#1A1614;--text2:#6B5E56;--text3:#A09188;
+  --rose:#C4474A;--rose2:#E8706E;--rose-bg:#FDF1F1;--rose-border:#F0C4C4;
+  --amber:#C47B2C;--amber2:#E8A055;--amber-bg:#FDF6EE;--amber-border:#F0D8B0;
+  --green:#2E7D5A;--green2:#4EA880;--green-bg:#EEF8F3;--green-border:#B0DFC8;
+  --lavender:#7B6BA8;--lavender-bg:#F3F0FA;--lav-border:#D0C8E8;
+  --gold:#B8860B;--gold-bg:#FFF8E8;--gold-border:#F0D878;
+  --teal:#1A8080;--teal-bg:#EEF8F8;--teal-border:#A0D8D8;
+  --font-serif:'Fraunces',Georgia,serif;--font-sans:'DM Sans',system-ui,sans-serif;
+  --r:16px;--r-sm:10px;--shadow:0 2px 12px rgba(26,22,20,0.08);--shadow-lg:0 8px 32px rgba(26,22,20,0.14);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg2);font-family:var(--font-sans);font-size:15px;color:var(--text);min-height:100vh;display:flex;justify-content:center}
+.phone-wrap{width:100%;max-width:420px;min-height:100vh;background:var(--bg);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column;min-height:calc(100vh - 70px);overflow-y:auto;padding-bottom:32px;animation:screenIn 0.28s cubic-bezier(0.4,0,0.2,1)}
+.screen.active{display:flex}
+.onboard-screen{display:none;flex:1;flex-direction:column;min-height:100vh;overflow-y:auto;padding:0 0 32px;animation:screenIn 0.3s ease}
+.onboard-screen.active{display:flex}
+@keyframes screenIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* COMMON */
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 6px;font-size:12px;font-weight:600;color:var(--text2);flex-shrink:0}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 14px;flex-shrink:0}
+.top-bar-title{font-family:var(--font-serif);font-size:20px;font-weight:600;color:var(--text)}
+.top-bar-sub{font-size:12px;color:var(--text3);margin-top:1px}
+.icon-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all 0.15s}
+.icon-btn:active{transform:scale(0.92);background:var(--bg2)}
+.scroll-area{padding:0 16px;flex:1}
+.card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.card-title{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3)}
+.card-action{font-size:12px;color:var(--rose);font-weight:500;cursor:pointer}
+
+/* STATUS CHIPS */
+.status-row{display:flex;gap:8px;margin-bottom:12px}
+.status-chip{flex:1;padding:12px 10px;border-radius:var(--r-sm);border:1px solid;text-align:center}
+.chip-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em}
+.chip-val{font-family:var(--font-serif);font-size:18px;font-weight:400;margin-top:2px}
+.chip-green{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.chip-amber{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)}
+.chip-rose{background:var(--rose-bg);border-color:var(--rose-border);color:var(--rose)}
+.chip-lav{background:var(--lavender-bg);border-color:var(--lav-border);color:var(--lavender)}
+.chip-gold{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold)}
+.chip-teal{background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal)}
+
+/* ALERT BANNERS */
+.alert-banner{border-radius:var(--r-sm);padding:14px 16px;margin-bottom:12px;display:flex;align-items:flex-start;gap:12px;border:1.5px solid;cursor:pointer;transition:transform 0.15s}
+.alert-banner:active{transform:scale(0.98)}
+.alert-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.alert-rose{background:var(--rose-bg);border-color:var(--rose-border)}
+.alert-amber{background:var(--amber-bg);border-color:var(--amber-border)}
+.alert-green{background:var(--green-bg);border-color:var(--green-border)}
+.alert-gold{background:var(--gold-bg);border-color:var(--gold-border)}
+.alert-teal{background:var(--teal-bg);border-color:var(--teal-border)}
+.alert-title{font-weight:600;font-size:13px;margin-bottom:2px}
+.alert-rose .alert-title{color:var(--rose)}
+.alert-amber .alert-title{color:var(--amber)}
+.alert-green .alert-title{color:var(--green)}
+.alert-gold .alert-title{color:var(--gold)}
+.alert-teal .alert-title{color:var(--teal)}
+.alert-desc{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* QUICK LOG */
+.quick-log-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.log-btn{padding:12px 10px;border-radius:var(--r-sm);border:1.5px solid var(--border);background:var(--surface);display:flex;align-items:center;gap:8px;cursor:pointer;transition:all 0.15s;font-size:12px;font-weight:500;color:var(--text2)}
+.log-btn:active{transform:scale(0.95)}
+.log-btn.logged{background:var(--rose-bg);border-color:var(--rose-border);color:var(--rose)}
+.log-btn-icon{font-size:18px}
+
+/* CYCLE RING */
+.cycle-ring-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0 4px}
+.ring-days{font-family:var(--font-serif);font-size:42px;font-weight:400;color:var(--text);line-height:1;text-align:center;margin-top:12px}
+.ring-sub{font-size:13px;color:var(--text2);margin-top:4px;text-align:center}
+.phases-row{display:flex;gap:6px;margin-top:14px}
+.phase-pill{flex:1;padding:7px 4px;border-radius:8px;text-align:center;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase}
+.phase-active{background:var(--rose);color:#fff}
+.phase-dim{background:var(--bg2);color:var(--text3)}
+
+/* SCORE */
+.score-wrap{display:flex;align-items:center;gap:20px;padding:4px 0 8px}
+.score-visual{position:relative;width:80px;height:80px;flex-shrink:0}
+.score-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:26px;font-weight:400;color:var(--amber);line-height:1}
+.score-num span{font-size:10px;color:var(--text3);font-family:var(--font-sans)}
+.score-info{flex:1}
+.score-level{font-size:16px;font-weight:600;color:var(--amber);margin-bottom:4px}
+.score-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.factors-list{margin-top:12px}
+.factor-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.factor-row:last-child{border-bottom:none}
+.factor-name{color:var(--text2)}
+.factor-val{font-weight:600;color:var(--amber)}
+
+/* CALENDAR */
+.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cal-month{font-family:var(--font-serif);font-size:18px;font-weight:400}
+.cal-nav{display:flex;gap:8px}
+.cal-nav-btn{width:30px;height:30px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--text2);transition:all 0.15s}
+.cal-nav-btn:active{background:var(--border)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-day-name{text-align:center;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);padding:4px 0}
+.cal-day{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:all 0.15s;position:relative;color:var(--text2)}
+.cal-day:active{transform:scale(0.88)}
+.cal-day.today{font-weight:700;color:var(--text);background:var(--bg2)}
+.cal-day.period{background:var(--rose);color:#fff}
+.cal-day.period-light{background:var(--rose-bg);color:var(--rose)}
+.cal-day.ovulation{background:var(--amber-bg)}
+.cal-day.ovulation::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--amber)}
+.cal-day.fertile{background:var(--green-bg)}
+.cal-day.empty{cursor:default}
+.cal-legend{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.legend-dot{width:10px;height:10px;border-radius:3px}
+
+/* SYMPTOM */
+.symptom-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.symptom-item:last-child{border-bottom:none}
+.sym-icon-wrap{width:38px;height:38px;border-radius:10px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sym-body{flex:1}
+.sym-name{font-size:13px;font-weight:600;color:var(--text)}
+.sym-date{font-size:11px;color:var(--text3);margin-top:1px}
+.sym-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:12px;border:1px solid;margin-top:5px;display:inline-block}
+.badge-rose{background:var(--rose-bg);border-color:var(--rose-border);color:var(--rose)}
+.badge-amber{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)}
+.badge-green{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.badge-lav{background:var(--lavender-bg);border-color:var(--lav-border);color:var(--lavender)}
+.sym-count{font-size:11px;color:var(--text3);font-weight:500;flex-shrink:0;align-self:center}
+
+/* SCREENING */
+.screening-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity 0.15s}
+.screening-item:last-child{border-bottom:none}
+.screening-item:active{opacity:0.7}
+.sc-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sc-body{flex:1}
+.sc-name{font-size:14px;font-weight:600;color:var(--text)}
+.sc-due{font-size:12px;color:var(--text2);margin-top:2px}
+.sc-status{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid;flex-shrink:0}
+
+/* EDU CARD */
+.edu-card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;margin-bottom:12px;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;box-shadow:var(--shadow)}
+.edu-card:active{transform:scale(0.98)}
+.edu-card-header{height:80px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative}
+.edu-card-body{padding:14px 16px}
+.edu-card-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:4px}
+.edu-card-title{font-family:var(--font-serif);font-size:16px;font-weight:400;color:var(--text);margin-bottom:4px}
+.edu-card-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.edu-read-time{font-size:11px;color:var(--text3);margin-top:8px}
+
+/* BOTTOM NAV */
+.bottom-nav{display:flex;background:var(--surface);border-top:1px solid var(--border);padding:8px 0 env(safe-area-inset-bottom,8px);flex-shrink:0;position:sticky;bottom:0;z-index:100;box-shadow:0 -4px 20px rgba(26,22,20,0.06)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;cursor:pointer;transition:all 0.15s;border:none;background:transparent;position:relative}
+.nav-item:active{transform:scale(0.88)}
+.nav-icon{font-size:22px;transition:transform 0.15s}
+.nav-item.active .nav-icon{transform:scale(1.15)}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:0.04em;color:var(--text3);transition:color 0.15s}
+.nav-item.active .nav-label{color:var(--rose)}
+.nav-premium-dot{position:absolute;top:2px;right:calc(50% - 14px);width:7px;height:7px;border-radius:50%;background:var(--gold);border:1.5px solid var(--bg)}
+
+/* BUTTONS */
+.btn-primary{width:100%;padding:16px;border-radius:12px;background:var(--rose);color:#fff;border:none;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;transition:all 0.15s;letter-spacing:0.02em}
+.btn-primary:active{transform:scale(0.97);background:#b03c3f}
+.btn-secondary{width:100%;padding:14px;border-radius:12px;background:transparent;color:var(--rose);border:1.5px solid var(--rose-border);font-family:var(--font-sans);font-size:14px;font-weight:600;cursor:pointer;transition:all 0.15s}
+.btn-secondary:active{background:var(--rose-bg)}
+.btn-gold{width:100%;padding:15px;border-radius:12px;background:linear-gradient(135deg,#C8960A,#E8B830);color:#fff;border:none;font-family:var(--font-sans);font-size:15px;font-weight:700;cursor:pointer;transition:all 0.15s;letter-spacing:0.02em;box-shadow:0 4px 16px rgba(184,134,11,0.3)}
+.btn-gold:active{transform:scale(0.97)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,22,20,0.5);z-index:1000;display:none;align-items:flex-end;justify-content:center;animation:fadeIn 0.2s}
+.modal-overlay.open{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-sheet{background:var(--surface);width:100%;max-width:420px;border-radius:20px 20px 0 0;padding:0 20px 40px;animation:slideUp 0.3s cubic-bezier(0.4,0,0.2,1);max-height:90vh;overflow-y:auto}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:12px auto 20px}
+.modal-title{font-family:var(--font-serif);font-size:22px;font-weight:400;margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5}
+.severity-row{display:flex;gap:8px;margin-bottom:20px}
+.sev-btn{flex:1;padding:10px 6px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;text-align:center;transition:all 0.15s}
+.sev-btn:active{transform:scale(0.95)}
+.sev-btn.selected{border-color:var(--rose);background:var(--rose-bg);color:var(--rose)}
+.sev-btn.mild.selected{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.sev-btn.moderate.selected{border-color:var(--amber);background:var(--amber-bg);color:var(--amber)}
+.disclaimer{font-size:11px;color:var(--text3);line-height:1.5;background:var(--bg2);border-radius:8px;padding:10px 12px;margin-bottom:16px}
+
+/* FORMS */
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;display:block}
+.form-select,.form-input{width:100%;padding:13px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-family:var(--font-sans);font-size:14px;color:var(--text);appearance:none;-webkit-appearance:none;outline:none;transition:border-color 0.15s}
+.form-select:focus,.form-input:focus{border-color:var(--rose)}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.choice-btn{padding:12px 10px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-family:var(--font-sans);font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.15s;text-align:center}
+.choice-btn:active{transform:scale(0.96)}
+.choice-btn.selected{border-color:var(--rose);background:var(--rose-bg);color:var(--rose);font-weight:600}
+
+/* ONBOARDING */
+.ob-hero{background:linear-gradient(160deg,#FFF5F5 0%,#FFF8EE 50%,#F0F8F4 100%);padding:48px 28px 36px;text-align:center}
+.ob-logo{font-family:var(--font-serif);font-size:32px;font-style:italic;color:var(--rose);margin-bottom:8px}
+.ob-tagline{font-size:13px;color:var(--text2);line-height:1.5;max-width:260px;margin:0 auto}
+.ob-content{padding:24px 20px}
+.ob-step-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--text3);margin-bottom:6px}
+.ob-title{font-family:var(--font-serif);font-size:24px;font-weight:400;color:var(--text);margin-bottom:8px}
+.ob-sub{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:24px}
+.ob-consent-box{background:var(--bg2);border-radius:10px;padding:14px;font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:20px;border:1px solid var(--border)}
+.ob-progress{display:flex;gap:6px;margin-bottom:24px}
+.ob-dot{flex:1;height:3px;border-radius:2px;background:var(--border);transition:background 0.3s}
+.ob-dot.done{background:var(--rose)}
+
+/* PROFILE */
+.profile-hero{background:linear-gradient(140deg,#FFF5F5 0%,#FFF8EE 100%);padding:24px 20px;display:flex;gap:16px;align-items:center;margin:0 16px 16px;border-radius:var(--r);border:1px solid var(--border)}
+.avatar{width:60px;height:60px;border-radius:50%;background:var(--rose);color:#fff;font-family:var(--font-serif);font-size:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.profile-name{font-family:var(--font-serif);font-size:20px;font-weight:400;color:var(--text)}
+.profile-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.profile-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:12px;margin-top:6px}
+.badge-free{background:var(--amber-bg);border:1px solid var(--amber-border);color:var(--amber)}
+.badge-premium{background:linear-gradient(90deg,#FFF0A0,#FFE060);border:1px solid var(--gold-border);color:var(--gold)}
+.settings-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s}
+.settings-item:active{background:var(--bg2)}
+.settings-item:last-child{border-bottom:none}
+.settings-icon{font-size:20px;width:36px;text-align:center}
+.settings-label{flex:1;font-size:14px;color:var(--text)}
+.settings-arrow{color:var(--text3);font-size:14px}
+
+/* VACC */
+.vacc-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.vacc-item:last-child{border-bottom:none}
+.vacc-dot{width:14px;height:14px;border-radius:50%;border:2px solid;flex-shrink:0}
+.vacc-dot.done{background:var(--green);border-color:var(--green)}
+.vacc-dot.pending{background:transparent;border-color:var(--border2)}
+.vacc-label{flex:1;font-size:13px;color:var(--text)}
+.vacc-date{font-size:11px;color:var(--text3)}
+
+/* EXPORT */
+.export-btn{display:flex;align-items:center;gap:12px;padding:16px;background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:var(--r-sm);cursor:pointer;transition:all 0.15s;margin-bottom:12px}
+.export-btn:active{transform:scale(0.97)}
+.export-icon{font-size:24px}
+.export-label{font-size:14px;font-weight:600;color:var(--green)}
+.export-sub{font-size:11px;color:var(--text2)}
+
+/* MINI CHART */
+.mini-chart{display:flex;gap:4px;align-items:flex-end;height:48px;margin-top:10px}
+.bar{flex:1;border-radius:3px 3px 0 0}
+.bar-rose{background:var(--rose)}
+.bar-rose-light{background:var(--rose-bg);border:1px solid var(--rose-border)}
+.bar-amber{background:var(--amber)}
+.bar-green{background:var(--green2)}
+
+/* PROGRESS */
+.prog-row{margin-bottom:12px}
+.prog-header{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px}
+.prog-label{color:var(--text2)}
+.prog-val{font-weight:600}
+.prog-bar{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:var(--rose);transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:2000;white-space:nowrap;pointer-events:none;max-width:320px;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ══════ PREMIUM-SPECIFIC STYLES ══════ */
+
+/* PREMIUM LOCK OVERLAY */
+.premium-lock{position:relative;overflow:hidden}
+.premium-lock::after{content:'';position:absolute;inset:0;background:rgba(247,244,240,0.7);backdrop-filter:blur(3px);z-index:5;border-radius:inherit}
+.lock-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;background:linear-gradient(135deg,#B8860B,#E8B830);color:#fff;font-size:12px;font-weight:700;padding:8px 16px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 16px rgba(184,134,11,0.4);cursor:pointer}
+
+/* INSIGHT CARD */
+.insight-card{background:linear-gradient(135deg,var(--lavender-bg),#EAE8F8);border:1px solid var(--lav-border);border-radius:var(--r);padding:18px;margin-bottom:12px}
+.insight-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.insight-icon{font-size:24px}
+.insight-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--lavender)}
+.insight-title{font-family:var(--font-serif);font-size:17px;font-weight:400;color:var(--text);margin-bottom:6px}
+.insight-desc{font-size:13px;color:var(--text2);line-height:1.65}
+
+/* TREND LINE SVG */
+.trend-svg{width:100%;height:80px;margin:8px 0 4px}
+
+/* MOOD TRACKER */
+.mood-row{display:flex;gap:8px;margin:8px 0}
+.mood-btn{flex:1;padding:10px 4px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-size:20px;text-align:center;cursor:pointer;transition:all 0.15s}
+.mood-btn:active{transform:scale(0.9)}
+.mood-btn.selected{border-color:var(--lavender);background:var(--lavender-bg)}
+.mood-label{font-size:9px;display:block;color:var(--text3);margin-top:3px;font-weight:600;text-transform:uppercase}
+
+/* PATTERN INSIGHT ROW */
+.pattern-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.pattern-row:last-child{border-bottom:none}
+.pattern-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.pattern-body{flex:1}
+.pattern-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.pattern-sub{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* HEATMAP */
+.heatmap-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin:10px 0 6px}
+.hm-cell{aspect-ratio:1;border-radius:3px}
+.hm-0{background:var(--bg2)}
+.hm-1{background:#F5C4C4}
+.hm-2{background:#E88888}
+.hm-3{background:var(--rose)}
+.hm-4{background:#9A2020}
+
+/* DOCTOR NOTE AREA */
+.doctor-note{background:linear-gradient(135deg,#F8FFFC,#F0FFF6);border:1.5px solid var(--green-border);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.doc-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.doc-avatar{width:40px;height:40px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.doc-name{font-size:13px;font-weight:600;color:var(--text)}
+.doc-title{font-size:11px;color:var(--text3)}
+.doc-note-text{font-size:13px;color:var(--text2);line-height:1.7;font-style:italic}
+
+/* CHAT BUBBLE */
+.chat-wrap{display:flex;flex-direction:column;gap:10px;padding:4px 0}
+.bubble{max-width:85%;padding:12px 14px;border-radius:16px;font-size:13px;line-height:1.55}
+.bubble-user{align-self:flex-end;background:var(--rose);color:#fff;border-radius:16px 16px 4px 16px}
+.bubble-ai{align-self:flex-start;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:16px 16px 16px 4px;box-shadow:var(--shadow)}
+.bubble-ai-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--lavender);margin-bottom:4px}
+.chat-input-row{display:flex;gap:8px;margin-top:8px}
+.chat-input{flex:1;padding:12px 14px;border-radius:24px;border:1.5px solid var(--border);background:var(--surface);font-family:var(--font-sans);font-size:13px;color:var(--text);outline:none}
+.chat-input:focus{border-color:var(--lavender)}
+.chat-send{width:42px;height:42px;border-radius:50%;background:var(--lavender);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s}
+.chat-send:active{transform:scale(0.9)}
+
+/* REPORT CARD */
+.report-month{font-family:var(--font-serif);font-size:22px;font-weight:400;color:var(--text);margin-bottom:4px}
+.report-sub{font-size:12px;color:var(--text3);margin-bottom:16px}
+.report-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.report-stat{background:var(--bg2);border-radius:10px;padding:12px 14px}
+.report-stat-val{font-family:var(--font-serif);font-size:24px;font-weight:400;color:var(--text);line-height:1}
+.report-stat-label{font-size:11px;color:var(--text3);margin-top:3px}
+
+/* PREMIUM BANNER (upsell) */
+.premium-upsell{background:linear-gradient(135deg,#1A1614 0%,#2D2420 100%);border-radius:var(--r);padding:20px;margin-bottom:12px;position:relative;overflow:hidden}
+.premium-upsell::before{content:'✦';position:absolute;right:-10px;top:-20px;font-size:120px;color:rgba(232,184,48,0.06)}
+.premium-upsell-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold);margin-bottom:8px}
+.premium-upsell-title{font-family:var(--font-serif);font-size:20px;font-weight:400;color:#fff;margin-bottom:6px}
+.premium-upsell-desc{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:16px}
+.premium-features-list{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.pf-item{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.8)}
+.pf-check{color:var(--gold);font-size:14px;flex-shrink:0}
+
+/* TIMELINE */
+.timeline-track{position:relative;padding-left:24px}
+.timeline-track::before{content:'';position:absolute;left:6px;top:10px;bottom:10px;width:1.5px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:16px}
+.tl-dot{position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg)}
+.tl-rose{background:var(--rose)}
+.tl-amber{background:var(--amber)}
+.tl-green{background:var(--green2)}
+.tl-lav{background:var(--lavender)}
+.tl-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.tl-sub{font-size:12px;color:var(--text2)}
+
+/* GOLD BADGE */
+.gold-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;background:linear-gradient(90deg,#FFF0A0,#FFE060);border:1px solid var(--gold-border);color:var(--gold)}
+
+/* SECTION DIVIDER */
+.section-divider{display:flex;align-items:center;gap:10px;margin:16px 0 12px;padding:0}
+.sd-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text3);white-space:nowrap}
+.sd-line{flex:1;height:1px;background:var(--border)}
+</style>
+</head>
+<body>
+<div class="phone-wrap" id="app">
+
+<!-- ══════ ONBOARDING ══════ -->
+<div class="onboard-screen active" id="ob-0">
+  <div class="ob-hero" style="min-height:52vh;display:flex;flex-direction:column;align-items:center;justify-content:center">
+    <div style="font-size:56px;margin-bottom:16px">🌸</div>
+    <div class="ob-logo">CervixCare+</div>
+    <p class="ob-tagline">Your private companion for menstrual health, cervical screening reminders, and wellness guidance.</p>
+  </div>
+  <div class="ob-content">
+    <div class="ob-consent-box"><strong style="color:var(--text)">Your privacy is our foundation.</strong> This app runs all calculations locally on your device. It does not diagnose disease. By continuing, you consent to local processing of your inputs.</div>
+    <button class="btn-primary" onclick="goOb(1)">Get Started — It's Free</button>
+    <button class="btn-secondary" style="margin-top:10px" onclick="launchApp()">I already have an account</button>
+  </div>
+</div>
+
+<div class="onboard-screen" id="ob-1">
+  <div class="status-bar" style="padding-top:20px"><span>9:41</span><span>●●●</span></div>
+  <div style="padding:16px 20px 0">
+    <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+    <div class="ob-step-label">Step 1 of 3</div>
+    <div class="ob-title">Tell us about yourself</div>
+    <div class="ob-sub">Stored only on your device. Helps us personalise reminders.</div>
+    <div class="form-group"><label class="form-label">Date of Birth</label><input class="form-input" type="date" value="1998-06-15"></div>
+    <div class="form-group"><label class="form-label">Menstruation Status</label>
+      <div class="choice-grid">
+        <div class="choice-btn selected" onclick="sel(this,'m')">Currently menstruating</div>
+        <div class="choice-btn" onclick="sel(this,'m')">Perimenopause</div>
+        <div class="choice-btn" onclick="sel(this,'m')">Post-menopausal</div>
+        <div class="choice-btn" onclick="sel(this,'m')">Not sure</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="goOb(2)" style="margin-top:8px">Continue →</button>
+  </div>
+</div>
+
+<div class="onboard-screen" id="ob-2">
+  <div class="status-bar" style="padding-top:20px"><span>9:41</span><span>●●●</span></div>
+  <div style="padding:16px 20px 0">
+    <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot"></div></div>
+    <div class="ob-step-label">Step 2 of 3</div>
+    <div class="ob-title">Screening history</div>
+    <div class="ob-sub">Skip if you don't know — we'll help you find out.</div>
+    <div class="form-group"><label class="form-label">Last Pap / HPV test / VIA</label><input class="form-input" type="date" value="2022-03-10"></div>
+    <div class="form-group"><label class="form-label">Type of screening</label>
+      <select class="form-select"><option>Pap Smear (Cytology)</option><option>HPV DNA Test</option><option>VIA (Visual Inspection)</option><option>Not sure</option><option>Never been screened</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">HPV Vaccination status</label>
+      <div class="choice-grid">
+        <div class="choice-btn" onclick="sel(this,'v')">Fully vaccinated</div>
+        <div class="choice-btn" onclick="sel(this,'v')">Partially (1–2 doses)</div>
+        <div class="choice-btn selected" onclick="sel(this,'v')">Not vaccinated</div>
+        <div class="choice-btn" onclick="sel(this,'v')">Not sure</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="goOb(3)" style="margin-top:8px">Continue →</button>
+  </div>
+</div>
+
+<div class="onboard-screen" id="ob-3">
+  <div class="status-bar" style="padding-top:20px"><span>9:41</span><span>●●●</span></div>
+  <div style="padding:16px 20px 0">
+    <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot done"></div></div>
+    <div class="ob-step-label">Step 3 of 3</div>
+    <div class="ob-title">Risk factors</div>
+    <div class="ob-sub">Completely optional. Helps calibrate your Risk Indicator.</div>
+    <div class="form-group"><label class="form-label">Tobacco use</label>
+      <div class="choice-grid">
+        <div class="choice-btn selected" onclick="sel(this,'t')">Non-smoker</div>
+        <div class="choice-btn" onclick="sel(this,'t')">Former smoker</div>
+        <div class="choice-btn" onclick="sel(this,'t')">Occasional</div>
+        <div class="choice-btn" onclick="sel(this,'t')">Regular smoker</div>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Average cycle length</label>
+      <select class="form-select"><option>21–24 days</option><option selected>25–30 days (typical)</option><option>31–35 days</option><option>Irregular</option></select>
+    </div>
+    <div class="disclaimer">⚕️ CervixCare+ does not diagnose disease. All indicators are for educational guidance only.</div>
+    <button class="btn-primary" onclick="launchApp()">✨ Set Up My Profile</button>
+  </div>
+</div>
+
+<!-- ══════ MAIN APP ══════ -->
+<div id="main-app" style="display:none;flex-direction:column;flex:1">
+
+<!-- ────── HOME ────── -->
+<div class="screen active" id="screen-home">
+  <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+  <div class="top-bar">
+    <div><div class="top-bar-title">Good morning, Priya 🌸</div><div class="top-bar-sub">Thursday, 27 Feb 2025</div></div>
+    <div style="display:flex;gap:8px">
+      <div class="gold-chip">✦ Premium</div>
+      <div class="icon-btn" onclick="openModal('modal-notif')">🔔</div>
+    </div>
+  </div>
+  <div class="scroll-area">
+
+    <div class="alert-banner alert-amber" onclick="navTo('screen-screening')">
+      <div class="alert-icon">⚠️</div>
+      <div><div class="alert-title">Pap smear overdue by 11 months</div><div class="alert-desc">Last screening: March 2022. Recommended every 3 years. Tap to update.</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">My Cycle</div><div class="card-action" onclick="navTo('screen-cycle')">Full calendar →</div></div>
+      <div class="cycle-ring-wrap">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r="58" fill="none" stroke="#EDE8E2" stroke-width="10"/>
+          <circle cx="70" cy="70" r="58" fill="none" stroke="#C4474A" stroke-width="10" stroke-dasharray="364.4" stroke-dashoffset="270" stroke-linecap="round" transform="rotate(-90 70 70)"/>
+        </svg>
+        <div class="ring-days">8</div><div class="ring-sub">days until next period</div>
+      </div>
+      <div class="phases-row">
+        <div class="phase-pill phase-dim">Menstrual</div>
+        <div class="phase-pill phase-dim">Follicular</div>
+        <div class="phase-pill phase-active">Luteal</div>
+        <div class="phase-pill phase-dim">Ovulation</div>
+      </div>
+    </div>
+
+    <div class="status-row">
+      <div class="status-chip chip-rose"><div class="chip-label">Screening</div><div class="chip-val">Overdue</div></div>
+      <div class="status-chip chip-amber"><div class="chip-label">Risk Score</div><div class="chip-val">62</div></div>
+      <div class="status-chip chip-lav"><div class="chip-label">Mood Today</div><div class="chip-val">😌</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">Log Today</div><div class="card-action" onclick="navTo('screen-symptoms')">History →</div></div>
+      <div class="quick-log-grid">
+        <div class="log-btn" id="log-b" onclick="tapLog('log-b','Spotting logged ✓')"><span class="log-btn-icon">🩸</span>Spotting</div>
+        <div class="log-btn" id="log-p" onclick="tapLog('log-p','Pain logged ✓')"><span class="log-btn-icon">💢</span>Pelvic Pain</div>
+        <div class="log-btn" id="log-d" onclick="tapLog('log-d','Discharge logged ✓')"><span class="log-btn-icon">💧</span>Discharge</div>
+        <div class="log-btn" onclick="openModal('modal-log')"><span class="log-btn-icon">➕</span>More</div>
+      </div>
+    </div>
+
+    <!-- PREMIUM: AI INSIGHT OF THE DAY -->
+    <div class="insight-card" onclick="navTo('screen-insights')">
+      <div class="insight-header">
+        <div class="insight-icon">🔮</div>
+        <div><div class="gold-chip">✦ Premium Insight</div></div>
+      </div>
+      <div class="insight-title">Your cycle is trending longer this month</div>
+      <div class="insight-desc">Average shifted from 27 to 30 days over the past 3 cycles. This can be linked to seasonal change, stress, or dietary shifts. No cause for concern — but worth logging your stress levels this week.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">Risk Indicator</div></div>
+      <div class="score-wrap">
+        <div class="score-visual">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="34" fill="none" stroke="#EDE8E2" stroke-width="8"/>
+            <circle cx="40" cy="40" r="34" fill="none" stroke="#C47B2C" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="81.2" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+          </svg>
+          <div class="score-num">62<span>/100</span></div>
+        </div>
+        <div class="score-info">
+          <div class="score-level">Screening Recommended</div>
+          <div class="score-desc">Multiple risk indicators present. Relative scale — not a clinical probability.</div>
+        </div>
+      </div>
+      <div class="factors-list">
+        <div class="factor-row"><span class="factor-name">Missed screening (>3 years)</span><span class="factor-val">+4</span></div>
+        <div class="factor-row"><span class="factor-name">HPV unvaccinated</span><span class="factor-val">+2</span></div>
+        <div class="factor-row"><span class="factor-name">Intermittent spotting</span><span class="factor-val">+3</span></div>
+      </div>
+      <div class="disclaimer" style="margin-top:12px;margin-bottom:0">Only clinical screening can confirm disease. Consult a doctor if you have persistent symptoms.</div>
+    </div>
+
+    <div class="export-btn" onclick="navTo('screen-reports')">
+      <div class="export-icon">📋</div>
+      <div><div class="export-label">View Monthly Health Report</div><div class="export-sub">February 2025 · Premium feature</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ────── CYCLE ────── -->
+<div class="screen" id="screen-cycle">
+  <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+  <div class="top-bar"><div class="top-bar-title">Cycle Tracker</div><div class="icon-btn" onclick="openModal('modal-log-period')">+</div></div>
+  <div class="scroll-area">
+    <div class="card">
+      <div class="cal-header"><div class="cal-month">February 2025</div>
+        <div class="cal-nav"><div class="cal-nav-btn" onclick="showToast('← Previous month')">‹</div><div class="cal-nav-btn" onclick="showToast('Next month →')">›</div></div>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-day-name">S</div><div class="cal-day-name">M</div><div class="cal-day-name">T</div><div class="cal-day-name">W</div><div class="cal-day-name">T</div><div class="cal-day-name">F</div><div class="cal-day-name">S</div>
+        <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>
+        <div class="cal-day">1</div><div class="cal-day">2</div>
+        <div class="cal-day period">3</div><div class="cal-day period">4</div><div class="cal-day period">5</div><div class="cal-day period">6</div><div class="cal-day period-light">7</div><div class="cal-day period-light">8</div><div class="cal-day">9</div>
+        <div class="cal-day">10</div><div class="cal-day fertile">11</div><div class="cal-day fertile">12</div><div class="cal-day fertile">13</div><div class="cal-day ovulation">14</div><div class="cal-day fertile">15</div><div class="cal-day fertile">16</div>
+        <div class="cal-day">17</div><div class="cal-day">18</div><div class="cal-day">19</div><div class="cal-day">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div>
+        <div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day today">27</div><div class="cal-day">28</div>
+      </div>
+      <div class="cal-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--rose)"></div>Period</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green-bg);border:1px solid var(--green-border)"></div>Fertile</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber-bg);border:1px solid var(--amber-border)"></div>Ovulation</div>
+      </div>
+    </div>
+
+    <div class="status-row">
+      <div class="status-chip chip-lav" style="text-align:center"><div class="chip-label">Avg Cycle</div><div class="chip-val">28d</div></div>
+      <div class="status-chip chip-green" style="text-align:center"><div class="chip-label">Last Period</div><div class="chip-val">5d</div></div>
+      <div class="status-chip chip-amber" style="text-align:center"><div class="chip-label">Next Period</div><div class="chip-val">Mar 7</div></div>
+    </div>
+
+    <!-- PREMIUM: MOOD TRACKER -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">Mood & Energy Log</div><div class="gold-chip">✦ Premium</div></div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px">How are you feeling today?</div>
+      <div class="mood-row">
+        <div class="mood-btn" onclick="selMood(this)">😴<span class="mood-label">Tired</span></div>
+        <div class="mood-btn selected" onclick="selMood(this)">😌<span class="mood-label">Calm</span></div>
+        <div class="mood-btn" onclick="selMood(this)">😊<span class="mood-label">Good</span></div>
+        <div class="mood-btn" onclick="selMood(this)">😤<span class="mood-label">Irritable</span></div>
+        <div class="mood-btn" onclick="selMood(this)">😢<span class="mood-label">Low</span></div>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-top:10px;margin-bottom:6px">Energy level</div>
+      <input type="range" min="1" max="5" value="3" style="width:100%;accent-color:var(--lavender)" oninput="showToast('Energy: '+this.value+'/5 logged')">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:2px"><span>Drained</span><span>Energised</span></div>
+    </div>
+
+    <!-- PREMIUM: SYMPTOM CORRELATION -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">Symptom vs Cycle Phase</div><div class="gold-chip">✦ Premium</div></div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:4px">When do your symptoms typically occur?</div>
+      <div class="mini-chart" style="height:56px">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div class="bar bar-rose" style="width:100%;height:70%;border-radius:3px 3px 0 0"></div>
+          <div style="font-size:9px;color:var(--text3)">Mens.</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div class="bar bar-rose-light" style="width:100%;height:20%;border-radius:3px 3px 0 0"></div>
+          <div style="font-size:9px;color:var(--text3)">Follic.</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div class="bar bar-amber" style="width:100%;height:35%;border-radius:3px 3px 0 0"></div>
+          <div style="font-size:9px;color:var(--text3)">Ovul.</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div class="bar bar-rose" style="width:100%;height:55%;border-radius:3px 3px 0 0"></div>
+          <div style="font-size:9px;color:var(--text3)">Luteal</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:8px">💡 Most of your symptoms occur in the menstrual & luteal phase — this is common but worth tracking over 3+ cycles.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">Flow Intensity — 6 Months</div></div>
+      <div class="mini-chart">
+        <div class="bar bar-rose" style="height:60%"></div><div class="bar bar-rose" style="height:75%"></div>
+        <div class="bar bar-rose" style="height:80%"></div><div class="bar bar-rose" style="height:65%"></div>
+        <div class="bar bar-rose-light" style="height:50%"></div><div class="bar bar-rose" style="height:70%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--text3)">
+        <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────── SYMPTOMS ────── -->
+<div class="screen" id="screen-symptoms">
+  <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+  <div class="top-bar"><div class="top-bar-title">Symptoms & Alerts</div><div class="icon-btn" onclick="openModal('modal-log')">+</div></div>
+  <div class="scroll-area">
+
+    <div class="alert-banner alert-rose">
+      <div class="alert-icon">🚨</div>
+      <div><div class="alert-title">Symptom pattern detected</div><div class="alert-desc">Spotting after intercourse reported 2× in 60 days. Medical evaluation recommended. This is not a diagnosis.</div></div>
+    </div>
+
+    <!-- PREMIUM: PAIN HEATMAP -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">Pain Heatmap — Last 3 Months</div><div class="gold-chip">✦ Premium</div></div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:6px">Each cell = 1 day · Darker = more intense pain</div>
+      <div class="heatmap-grid">
+        <div class="hm-cell hm-0"></div><div class="hm-cell hm-3"></div><div class="hm-cell hm-3"></div><div class="hm-cell hm-2"></div><div class="hm-cell hm-1"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-1"></div>
+        <div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-1"></div><div class="hm-cell hm-2"></div><div class="hm-cell hm-3"></div><div class="hm-cell hm-2"></div><div class="hm-cell hm-1"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div>
+        <div class="hm-cell hm-0"></div><div class="hm-cell hm-2"></div><div class="hm-cell hm-4"></div><div class="hm-cell hm-3"></div><div class="hm-cell hm-2"></div><div class="hm-cell hm-1"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-1"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center;font-size:11px;color:var(--text3)">
+        <div style="display:flex;gap:2px">
+          <div class="hm-cell hm-0" style="width:14px;height:14px;border-radius:3px"></div>
+          <div class="hm-cell hm-1" style="width:14px;height:14px;border-radius:3px"></div>
+          <div class="hm-cell hm-2" style="width:14px;height:14px;border-radius:3px"></div>
+          <div class="hm-cell hm-3" style="width:14px;height:14px;border-radius:3px"></div>
+          <div class="hm-cell hm-4" style="width:14px;height:14px;border-radius:3px"></div>
+        </div>
+        <span>None → Severe</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">Logged Symptoms</div><div class="card-action" onclick="openModal('modal-log')">+ Log New</div></div>
+      <div class="symptom-item">
+        <div class="sym-icon-wrap">🩸</div>
+        <div class="sym-body"><div class="sym-name">Spotting after intercourse</div><div class="sym-date">Feb 24 · Moderate</div><div class="sym-badge badge-rose">⚠ Red Flag</div></div>
+        <div class="sym-count">2× / 60d</div>
+      </div>
+      <div class="symptom-item">
+        <div class="sym-icon-wrap">💢</div>
+        <div class="sym-body"><div class="sym-name">Pelvic pain</div><div class="sym-date">Feb 20 · Mild</div><div class="sym-badge badge-amber">Monitor</div></div>
+        <div class="sym-count">3× / 60d</div>
+      </div>
+      <div class="symptom-item">
+        <div class="sym-icon-wrap">💧</div>
+        <div class="sym-body"><div class="sym-name">Unusual discharge</div><div class="sym-date">Feb 18 · Noted</div><div class="sym-badge badge-amber">Monitor</div></div>
+        <div class="sym-count">1× / 60d</div>
+      </div>
+    </div>
+
+    <!-- PREMIUM: PATTERN INTELLIGENCE -->
+    <div class="insight-card">
+      <div class="insight-header"><div class="insight-icon">🧠</div><div class="gold-chip">✦ Pattern Intelligence</div></div>
+      <div class="insight-title">3 patterns found in your data</div>
+      <div class="timeline-track" style="margin-top:12px">
+        <div class="tl-item"><div class="tl-dot tl-rose"></div>
+          <div class="tl-title">Pain peaks in Luteal phase</div>
+          <div class="tl-sub">Consistent across 4 cycles. Discuss with your doctor if cramps are ≥6/10.</div>
+        </div>
+        <div class="tl-item"><div class="tl-dot tl-amber"></div>
+          <div class="tl-title">Discharge increases mid-cycle</div>
+          <div class="tl-sub">Normal around ovulation. No odour reported — no action needed.</div>
+        </div>
+        <div class="tl-item" style="margin-bottom:0"><div class="tl-dot tl-rose"></div>
+          <div class="tl-title">Post-coital spotting (new — 2 occurrences)</div>
+          <div class="tl-sub">Crossed threshold. Clinical evaluation recommended.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREMIUM: CLINICIAN DISCUSSION NOTE -->
+    <div class="doctor-note" onclick="openModal('modal-doc-note')">
+      <div class="doc-header">
+        <div class="doc-avatar">🩺</div>
+        <div><div class="doc-name">Clinician Discussion Note</div><div class="doc-title">Ready to print · Premium feature</div></div>
+      </div>
+      <div class="doc-note-text">"Patient reports recurrent post-coital spotting × 2 in 60 days, mild pelvic pain × 3, irregular discharge × 1. Last Pap smear March 2022 — overdue. HPV vaccination not initiated. Recommend: cervical examination + smear..."</div>
+      <div style="margin-top:12px"><button class="btn-primary" style="padding:12px" onclick="event.stopPropagation();showToast('📋 Clinician note copied to clipboard!')">Copy Note for Doctor Visit</button></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ────── INSIGHTS (PREMIUM) ────── -->
+<div class="screen" id="screen-insights">
+  <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+  <div class="top-bar">
+    <div><div class="top-bar-title">AI Health Insights</div><div class="top-bar-sub">Powered by your data · Private</div></div>
+    <div class="gold-chip">✦ Premium</div>
+  </div>
+  <div class="scroll-area">
+
+    <!-- WELLNESS SCORE -->
+    <div class="card" style="background:linear-gradient(135deg,#FFF9F0,#FFF5F5)">
+      <div class="card-header"><div class="card-title">Monthly Wellness Score</div></div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="position:relative;width:88px;height:88px;flex-shrink:0">
+          <svg width="88" height="88" viewBox="0 0 88 88">
+            <circle cx="44" cy="44" r="36" fill="none" stroke="#EDE8E2" stroke-width="10"/>
+            <circle cx="44" cy="44" r="36" fill="none" stroke="#4EA880" stroke-width="10" stroke-dasharray="226.2" stroke-dashoffset="79" stroke-linecap="round" transform="rotate(-90 44 44)"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:28px;color:var(--green);line-height:1">65<span style="font-size:10px;color:var(--text3);font-family:var(--font-sans)">/100</span></div>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:600;color:var(--green);margin-bottom:4px">Moderate Wellness</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.5">Cycle regularity good. Screening gap and unlogged symptoms pulling score down.</div>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="prog-row"><div class="prog-header"><span class="prog-label">Cycle Regularity</span><span class="prog-val" style="color:var(--green)">82%</span></div><div class="prog-bar"><div class="prog-fill" style="width:82%;background:var(--green2)"></div></div></div>
+        <div class="prog-row"><div class="prog-header"><span class="prog-label">Screening Compliance</span><span class="prog-val" style="color:var(--rose)">12%</span></div><div class="prog-bar"><div class="prog-fill" style="width:12%;background:var(--rose)"></div></div></div>
+        <div class="prog-row"><div class="prog-header"><span class="prog-label">Symptom Frequency</span><span class="prog-val" style="color:var(--amber)">Moderate</span></div><div class="prog-bar"><div class="prog-fill" style="width:55%;background:var(--amber2)"></div></div></div>
+        <div class="prog-row"><div class="prog-header"><span class="prog-label">Mood Stability</span><span class="prog-val" style="color:var(--lavender)">74%</span></div><div class="prog-bar"><div class="prog-fill" style="width:74%;background:var(--lavender)"></div></div></div>
+      </div>
+    </div>
+
+    <!-- ASK AI ASSISTANT -->
+    <div class="card" style="border-color:var(--lav-border)">
+      <div class="card-header"><div class="card-title">Ask Your Health Assistant</div><div class="gold-chip">✦ Premium</div></div>
+      <div class="chat-wrap" id="chat-area">
+        <div class="bubble bubble-ai"><div class="bubble-ai-name">CervixCare AI</div>Hi Priya! I've analysed your last 3 months of data. I noticed your luteal phase symptoms are increasing. Would you like me to explain what this might mean?</div>
+        <div class="bubble bubble-user">Yes, what does it mean?</div>
+        <div class="bubble bubble-ai"><div class="bubble-ai-name">CervixCare AI</div>Increasing luteal phase symptoms — like cramps and mood changes — can relate to hormonal shifts. It's not a diagnosis, but logging your energy and pain daily will help identify a pattern. I'd suggest discussing this at your next gynaecology visit. Want me to add it to your clinician note?</div>
+      </div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="chat-in" placeholder="Ask about your cycle, symptoms…" onkeydown="if(event.key==='Enter')sendChat()">
+        <div class="chat-send" onclick="sendChat()">↑</div>
+      </div>
+      <div class="disclaimer" style="margin-top:10px;margin-bottom:0">AI responses are educational, not medical advice. Always consult a qualified healthcare provider.</div>
+    </div>
+
+    <!-- 6-MONTH TREND -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">Cycle Length Trend</div><div class="gold-chip">✦ Premium</div></div>
+      <svg class="trend-svg" viewBox="0 0 300 80" preserveAspectRatio="none">
+        <defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C4474A" stop-opacity="0.15"/><stop offset="100%" stop-color="#C4474A" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0,45 L50,42 L100,40 L150,50 L200,55 L250,48 L300,35" stroke="var(--rose)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M0,45 L50,42 L100,40 L150,50 L200,55 L250,48 L300,35 L300,80 L0,80 Z" fill="url(#tg)"/>
+        <circle cx="50" cy="42" r="4" fill="var(--rose)"/><circle cx="100" cy="40" r="4" fill="var(--rose)"/><circle cx="150" cy="50" r="4" fill="var(--rose)"/><circle cx="200" cy="55" r="4" fill="var(--rose)"/><circle cx="250" cy="48" r="4" fill="var(--rose)"/><circle cx="300" cy="35" r="4" fill="var(--amber)"/>
+        <text x="0" y="75" font-size="10" fill="#A09188">Sep</text><text x="45" y="75" font-size="10" fill="#A09188">Oct</text><text x="95" y="75" font-size="10" fill="#A09188">Nov</text><text x="145" y="75" font-size="10" fill="#A09188">Dec</text><text x="195" y="75" font-size="10" fill="#A09188">Jan</text><text x="245" y="75" font-size="10" fill="#A09188">Feb</text>
+      </svg>
+      <div style="font-size:11px;color:var(--text3)">Cycle length: 27→27→27→28→29→30 days. Gradual lengthening detected.</div>
+    </div>
+
+    <!-- PERSONALISED ACTIONS -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">Your Action Plan This Month</div></div>
+      <div class="timeline-track">
+        <div class="tl-item"><div class="tl-dot tl-rose"></div>
+          <div class="tl-title">Book a Pap smear this week</div><div class="tl-sub">11 months overdue. AMRI, Apollo Kolkata accept walk-ins.</div>
+        </div>
+        <div class="tl-item"><div class="tl-dot tl-amber"></div>
+          <div class="tl-title">Start HPV vaccination series</div><div class="tl-sub">Dose 1 recommended. Budget ₹3,500 at private clinic.</div>
+        </div>
+        <div class="tl-item"><div class="tl-dot tl-lav"></div>
+          <div class="tl-title">Log mood & energy daily for 2 weeks</div><div class="tl-sub">Helps AI detect luteal phase pattern more accurately.</div>
+        </div>
+        <div class="tl-item" style="margin-bottom:0"><div class="tl-dot tl-green"></div>
+          <div class="tl-title">Download clinician summary before visit</div><div class="tl-sub">Ready to print — includes last 3 months of data.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ────── SCREENING ────── -->
+<div class="screen" id="screen-screening">
+  <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+  <div class="top-bar"><div class="top-bar-title">Screening & Vaccine</div><div class="icon-btn" onclick="showToast('ℹ️ WHO Guidelines')">ℹ</div></div>
+  <div class="scroll-area">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Screening Status</div></div>
+      <div class="screening-item" onclick="openModal('modal-update-pap')">
+        <div class="sc-icon" style="background:var(--rose-bg)">🔬</div>
+        <div class="sc-body"><div class="sc-name">Pap Smear / Cytology</div><div class="sc-due">Last: March 2022 · Due: March 2025</div></div>
+        <div class="sc-status" style="background:var(--rose-bg);border-color:var(--rose-border);color:var(--rose)">Overdue</div>
+      </div>
+      <div class="screening-item" onclick="showToast('Update HPV DNA test')">
+        <div class="sc-icon" style="background:var(--amber-bg)">🧬</div>
+        <div class="sc-body"><div class="sc-name">HPV DNA Test</div><div class="sc-due">Never recorded · Recommended</div></div>
+        <div class="sc-status" style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)">Never done</div>
+      </div>
+      <div class="screening-item" onclick="showToast('VIA at NHM centres')">
+        <div class="sc-icon" style="background:var(--green-bg)">👁️</div>
+        <div class="sc-body"><div class="sc-name">VIA Screening</div><div class="sc-due">Available at NHM centres · Free</div></div>
+        <div class="sc-status" style="background:var(--green-bg);border-color:var(--green-border);color:var(--green)">Available</div>
+      </div>
+    </div>
+
+    <!-- PREMIUM: NEARBY CENTRES -->
+    <div class="card" style="border-color:var(--teal-border)">
+      <div class="card-header"><div class="card-title">Nearby Screening Centres</div><div class="gold-chip">✦ Premium</div></div>
+      <div class="symptom-item" onclick="showToast('Opening AMRI Hospital directions...')">
+        <div class="sym-icon-wrap" style="background:var(--teal-bg)">🏥</div>
+        <div class="sym-body"><div class="sym-name">AMRI Hospitals Kolkata</div><div class="sym-date">Dhakuria · 3.2 km · Pap, HPV test · ₹850</div></div>
+        <span style="font-size:13px;color:var(--teal);font-weight:600">→</span>
+      </div>
+      <div class="symptom-item" onclick="showToast('Opening Apollo directions...')">
+        <div class="sym-icon-wrap" style="background:var(--teal-bg)">🏥</div>
+        <div class="sym-body"><div class="sym-name">Apollo Clinic Salt Lake</div><div class="sym-date">Sector V · 5.1 km · Pap smear · ₹650</div></div>
+        <span style="font-size:13px;color:var(--teal);font-weight:600">→</span>
+      </div>
+      <div class="symptom-item" style="border-bottom:none" onclick="showToast('Opening NHM centre map...')">
+        <div class="sym-icon-wrap" style="background:var(--green-bg)">🏛️</div>
+        <div class="sym-body"><div class="sym-name">NHM VIA Camp — Gariahat PHC</div><div class="sym-date">Gariahat · 2.8 km · VIA screening · FREE</div></div>
+        <span style="font-size:13px;color:var(--green);font-weight:600">→</span>
+      </div>
+    </div>
+
+    <!-- PREMIUM: APPOINTMENT REMINDER -->
+    <div class="card" style="border-color:var(--gold-border);background:var(--gold-bg)">
+      <div class="card-header"><div class="card-title">Smart Appointment Reminder</div><div class="gold-chip">✦ Premium</div></div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">Set a date and we'll remind you 3 days before, day-before, and day-of — with your full clinician summary ready to download.</div>
+      <div class="form-group" style="margin-bottom:12px"><label class="form-label">Appointment date</label><input class="form-input" type="date" value="2025-03-08"></div>
+      <div class="form-group" style="margin-bottom:12px"><label class="form-label">Clinic / Hospital</label><input class="form-input" type="text" placeholder="e.g. AMRI Hospitals Dhakuria" value="AMRI Hospitals Dhakuria"></div>
+      <button class="btn-gold" onclick="showToast('✓ Smart reminder set for March 8 — Clinician summary will auto-generate')">Set Smart Reminder</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">HPV Vaccination</div></div>
+      <div class="vacc-item"><div class="vacc-dot pending"></div><div class="vacc-label">Dose 1 (Gardasil 9)</div><div class="vacc-date" style="color:var(--rose)">Not done</div></div>
+      <div class="vacc-item"><div class="vacc-dot pending"></div><div class="vacc-label">Dose 2 (6 months later)</div><div class="vacc-date">Pending</div></div>
+      <div class="vacc-item"><div class="vacc-dot pending"></div><div class="vacc-label">Dose 3 (6 months later)</div><div class="vacc-date">Pending</div></div>
+      <div style="margin-top:12px"><button class="btn-primary" onclick="openModal('modal-vacc-info')">💉 Schedule Vaccination</button></div>
+    </div>
+
+    <div class="card" style="background:linear-gradient(135deg,#F0F8F4,#FFF8EE)">
+      <div class="card-header"><div class="card-title">India Screening Guide</div></div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7">
+        <strong style="color:var(--text)">Age 25–30:</strong> VIA every 3 years (free, govt centres)<br>
+        <strong style="color:var(--text)">Age 30–65:</strong> Pap or HPV DNA every 3–5 years<br>
+        <strong style="color:var(--text)">West Bengal:</strong> NHM VIA camps at PHCs
+      </div>
+      <div class="disclaimer" style="margin-top:10px;margin-bottom:0">WHO/NHM recommendations cited. Consult a gynaecologist for personalised advice.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ────── REPORTS (PREMIUM) ────── -->
+<div class="screen" id="screen-reports">
+  <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+  <div class="top-bar">
+    <div><div class="top-bar-title">Monthly Reports</div><div class="top-bar-sub">Private · Generated on your device</div></div>
+    <div class="gold-chip">✦ Premium</div>
+  </div>
+  <div class="scroll-area">
+
+    <!-- CURRENT MONTH REPORT -->
+    <div class="card" style="background:linear-gradient(160deg,#FFF5F5,#FFFBF0)">
+      <div class="report-month">February 2025</div>
+      <div class="report-sub">Health Summary Report · Generated Feb 27</div>
+      <div class="report-stat-grid">
+        <div class="report-stat"><div class="report-stat-val">28d</div><div class="report-stat-label">Cycle length</div></div>
+        <div class="report-stat"><div class="report-stat-val" style="color:var(--rose)">3</div><div class="report-stat-label">Symptoms logged</div></div>
+        <div class="report-stat"><div class="report-stat-val" style="color:var(--amber)">62</div><div class="report-stat-label">Risk indicator</div></div>
+        <div class="report-stat"><div class="report-stat-val" style="color:var(--lavender)">😌 Calm</div><div class="report-stat-label">Avg mood</div></div>
+      </div>
+      <div style="margin-bottom:14px">
+        <div class="card-title" style="margin-bottom:10px">Key findings this month</div>
+        <div class="pattern-row">
+          <div class="pattern-dot" style="background:var(--rose)"></div>
+          <div class="pattern-body"><div class="pattern-title">Post-coital spotting — crossed alert threshold</div><div class="pattern-sub">2 occurrences in 60 days. Clinical evaluation recommended.</div></div>
+        </div>
+        <div class="pattern-row">
+          <div class="pattern-dot" style="background:var(--amber)"></div>
+          <div class="pattern-body"><div class="pattern-title">Cycle length increased by 2 days</div><div class="pattern-sub">27 → 29 days. Monitor over next 2 cycles.</div></div>
+        </div>
+        <div class="pattern-row" style="border-bottom:none">
+          <div class="pattern-dot" style="background:var(--green2)"></div>
+          <div class="pattern-body"><div class="pattern-title">Mood stable — mostly Calm / Good</div><div class="pattern-sub">No significant mood disruption this cycle.</div></div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="showToast('📥 February 2025 Report — generating PDF...')">Download PDF Report</button>
+    </div>
+
+    <!-- PAST MONTHS -->
+    <div class="section-divider"><div class="sd-line"></div><div class="sd-label">Past Reports</div><div class="sd-line"></div></div>
+    <div class="card" onclick="showToast('Opening January 2025 report...')">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-family:var(--font-serif);font-size:17px">January 2025</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px">Cycle: 29d · 2 symptoms · Risk: 58</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="sym-badge badge-amber">Moderate</div>
+          <div style="color:var(--text3)">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" onclick="showToast('Opening December 2024 report...')">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-family:var(--font-serif);font-size:17px">December 2024</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px">Cycle: 27d · 1 symptom · Risk: 55</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="sym-badge badge-amber">Moderate</div>
+          <div style="color:var(--text3)">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" onclick="showToast('Opening November 2024 report...')">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-family:var(--font-serif);font-size:17px">November 2024</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px">Cycle: 27d · 0 symptoms · Risk: 50</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="sym-badge badge-green">Routine</div>
+          <div style="color:var(--text3)">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLINICIAN EXPORT -->
+    <div class="export-btn" style="background:linear-gradient(135deg,var(--lavender-bg),#EAE8F8);border-color:var(--lav-border)" onclick="showToast('📋 Clinician Summary — 3 months data ready to download')">
+      <div class="export-icon">📋</div>
+      <div><div class="export-label" style="color:var(--lavender)">Download Clinician Summary PDF</div><div class="export-sub">Last 3 months · Bring to your doctor visit</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ────── PROFILE ────── -->
+<div class="screen" id="screen-profile">
+  <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+  <div class="top-bar"><div class="top-bar-title">My Profile</div></div>
+  <div class="scroll-area" style="padding:0">
+    <div style="height:12px"></div>
+    <div class="profile-hero">
+      <div class="avatar">P</div>
+      <div>
+        <div class="profile-name">Priya Sharma</div>
+        <div class="profile-sub">Age 26 · Kolkata · Menstruating</div>
+        <div class="profile-badge badge-premium">✦ Premium Member</div>
+      </div>
+    </div>
+
+    <!-- PREMIUM PERKS SUMMARY -->
+    <div class="premium-upsell" style="margin:0 16px 12px">
+      <div class="premium-upsell-tag">Your Premium Plan — ₹149/month</div>
+      <div class="premium-upsell-title">Everything you have unlocked</div>
+      <div class="premium-features-list">
+        <div class="pf-item"><div class="pf-check">✦</div>AI Health Insights + Pattern Detection</div>
+        <div class="pf-item"><div class="pf-check">✦</div>Monthly Health Report (PDF)</div>
+        <div class="pf-item"><div class="pf-check">✦</div>Clinician Discussion Note Generator</div>
+        <div class="pf-item"><div class="pf-check">✦</div>Pain Heatmap + Mood Tracker</div>
+        <div class="pf-item"><div class="pf-check">✦</div>Nearby Screening Centres Map</div>
+        <div class="pf-item"><div class="pf-check">✦</div>Smart Appointment Reminders</div>
+        <div class="pf-item"><div class="pf-check">✦</div>Cycle Length Trend Analysis</div>
+        <div class="pf-item"><div class="pf-check">✦</div>Ask AI Health Assistant</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin:0 16px 12px;padding:0;overflow:hidden">
+      <div class="settings-item" onclick="navTo('screen-reports')"><div class="settings-icon">📊</div><div class="settings-label">Monthly Reports</div><div class="settings-arrow">›</div></div>
+      <div class="settings-item" onclick="navTo('screen-insights')"><div class="settings-icon">🔮</div><div class="settings-label">AI Health Insights</div><div class="settings-arrow">›</div></div>
+      <div class="settings-item" onclick="showToast('📋 Clinician PDF generating...')"><div class="settings-icon">📋</div><div class="settings-label">Download Clinician PDF</div><div class="settings-arrow">›</div></div>
+      <div class="settings-item" onclick="showToast('📅 Calendar export — privacy-safe titles')"><div class="settings-icon">📅</div><div class="settings-label">Export Reminders to Calendar</div><div class="settings-arrow">›</div></div>
+      <div class="settings-item" onclick="showToast('🔔 Notification settings')"><div class="settings-icon">🔔</div><div class="settings-label">Notification Preferences</div><div class="settings-arrow">›</div></div>
+      <div class="settings-item" onclick="showToast('🛡️ Opening Privacy Dashboard...')"><div class="settings-icon">🛡️</div><div class="settings-label">Privacy & Consent Dashboard</div><div class="settings-arrow">›</div></div>
+      <div class="settings-item" onclick="showToast('⚠️ This will permanently delete all your data.')"><div class="settings-icon">🗑️</div><div class="settings-label" style="color:var(--rose)">Delete All My Data</div><div class="settings-arrow">›</div></div>
+    </div>
+    <div style="padding:16px;font-size:11px;color:var(--text3);line-height:1.6;text-align:center">
+      CervixCare+ v2.0 · All data stored locally on your device<br>Not a medical device. For screening reminders & education only.<br>
+      <span style="color:var(--rose);cursor:pointer">Privacy Policy</span> · <span style="color:var(--rose);cursor:pointer">Terms of Use</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── BOTTOM NAV ── -->
+<nav class="bottom-nav">
+  <button class="nav-item active" id="nav-home" onclick="navTo('screen-home')"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
+  <button class="nav-item" id="nav-cycle" onclick="navTo('screen-cycle')"><span class="nav-icon">📅</span><span class="nav-label">Cycle</span></button>
+  <button class="nav-item" id="nav-symptoms" onclick="navTo('screen-symptoms')"><span class="nav-icon">🩺</span><span class="nav-label">Symptoms</span></button>
+  <button class="nav-item" id="nav-insights" onclick="navTo('screen-insights')"><span class="nav-icon">🔮</span><span class="nav-label">Insights</span><div class="nav-premium-dot"></div></button>
+  <button class="nav-item" id="nav-screening" onclick="navTo('screen-screening')"><span class="nav-icon">🔬</span><span class="nav-label">Screening</span></button>
+  <button class="nav-item" id="nav-reports" onclick="navTo('screen-reports')"><span class="nav-icon">📊</span><span class="nav-label">Reports</span><div class="nav-premium-dot"></div></button>
+  <button class="nav-item" id="nav-profile" onclick="navTo('screen-profile')"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></button>
+</nav>
+</div>
+
+<!-- ══════ MODALS ══════ -->
+<div class="modal-overlay" id="modal-log" onclick="closeModal('modal-log')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Log a Symptom</div>
+    <div class="modal-sub">Stored privately on your device.</div>
+    <div class="form-group"><label class="form-label">Symptom type</label>
+      <select class="form-select"><option>Spotting / Bleeding after sex</option><option>Intermenstrual bleeding</option><option>Persistent pelvic pain</option><option>Unusual discharge</option><option>Heavy flow</option><option>Other</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">Severity</label>
+      <div class="severity-row"><div class="sev-btn mild" onclick="selSev(this)">Mild</div><div class="sev-btn moderate selected" onclick="selSev(this)">Moderate</div><div class="sev-btn" onclick="selSev(this)">Severe</div></div>
+    </div>
+    <div class="disclaimer">⚠️ Severe pelvic pain or heavy bleeding: seek emergency care immediately. Call 112.</div>
+    <button class="btn-primary" onclick="logSym()">Save Symptom</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-log-period" onclick="closeModal('modal-log-period')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Log Period</div>
+    <div class="modal-sub">Tap a date on the calendar or log today.</div>
+    <div class="form-group"><label class="form-label">Period start date</label><input class="form-input" type="date" value="2025-02-27"></div>
+    <div class="form-group"><label class="form-label">Flow intensity</label>
+      <div class="severity-row"><div class="sev-btn mild selected" onclick="selSev(this)">Light</div><div class="sev-btn moderate" onclick="selSev(this)">Medium</div><div class="sev-btn" onclick="selSev(this)">Heavy</div></div>
+    </div>
+    <div class="form-group"><label class="form-label">Pain level</label>
+      <div class="choice-grid"><div class="choice-btn selected" onclick="sel(this,'pa')">None</div><div class="choice-btn" onclick="sel(this,'pa')">Mild cramps</div><div class="choice-btn" onclick="sel(this,'pa')">Moderate</div><div class="choice-btn" onclick="sel(this,'pa')">Severe</div></div>
+    </div>
+    <button class="btn-primary" onclick="closeModal('modal-log-period');showToast('✓ Period logged for Feb 27')">Save Entry</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-update-pap" onclick="closeModal('modal-update-pap')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Update Pap Smear Record</div>
+    <div class="modal-sub">Log your last screening so we can send you reminders.</div>
+    <div class="form-group"><label class="form-label">Date of last screening</label><input class="form-input" type="date" value="2022-03-10"></div>
+    <div class="form-group"><label class="form-label">Result (optional)</label>
+      <select class="form-select"><option>Normal / Negative</option><option>ASCUS (mildly abnormal cells)</option><option>HPV Positive</option><option>Referred for further testing</option><option>Don't remember</option></select>
+    </div>
+    <button class="btn-primary" onclick="closeModal('modal-update-pap');showToast('✓ Screening record updated')">Save Record</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-vacc-info" onclick="closeModal('modal-vacc-info')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div style="font-size:40px;text-align:center;margin-bottom:12px">💉</div>
+    <div class="modal-title">Schedule HPV Vaccination</div>
+    <div class="modal-sub">Safe, effective, available in India.</div>
+    <div style="font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:16px">
+      <strong style="color:var(--text)">Free for girls 9–14:</strong> Govt hospitals under national programme.<br><br>
+      <strong style="color:var(--text)">Aged 15–26:</strong> Private clinics. Cost: ₹3,000–4,500 per dose (Gardasil 9).<br><br>
+      <strong style="color:var(--text)">Aged 27+:</strong> Discuss with your gynaecologist.
+    </div>
+    <button class="btn-primary" onclick="closeModal('modal-vacc-info');showToast('📍 Finding vaccine providers near you...')">Find Providers Near Me</button>
+    <button class="btn-secondary" style="margin-top:10px" onclick="closeModal('modal-vacc-info');showToast('✓ Vaccine reminder set for next week')">Set Reminder for Later</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-notif" onclick="closeModal('modal-notif')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Notifications</div>
+    <div class="symptom-item" style="padding:14px 0">
+      <div class="sym-icon-wrap" style="background:var(--rose-bg)">⚠️</div>
+      <div class="sym-body"><div class="sym-name" style="color:var(--rose)">Pap smear overdue</div><div class="sym-date">Screening 11 months overdue · Today</div></div>
+    </div>
+    <div class="symptom-item" style="padding:14px 0">
+      <div class="sym-icon-wrap" style="background:var(--gold-bg)">🔮</div>
+      <div class="sym-body"><div class="sym-name" style="color:var(--gold)">New AI insight available</div><div class="sym-date">Cycle trend analysis ready · Today</div></div>
+    </div>
+    <div class="symptom-item" style="padding:14px 0">
+      <div class="sym-icon-wrap" style="background:var(--amber-bg)">📅</div>
+      <div class="sym-body"><div class="sym-name">Period in 8 days</div><div class="sym-date">Predicted March 7 · Yesterday</div></div>
+    </div>
+    <div class="symptom-item" style="padding:14px 0;border-bottom:none">
+      <div class="sym-icon-wrap" style="background:var(--lavender-bg)">📊</div>
+      <div class="sym-body"><div class="sym-name">February report ready</div><div class="sym-date">Monthly health report generated · 2 days ago</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-doc-note" onclick="closeModal('modal-doc-note')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Clinician Discussion Note</div>
+    <div class="modal-sub">Auto-generated from your logged data. Review before sharing with your doctor.</div>
+    <div style="background:var(--bg2);border-radius:10px;padding:16px;font-size:13px;color:var(--text2);line-height:1.8;border:1px solid var(--border);margin-bottom:16px">
+      <strong style="color:var(--text)">Patient:</strong> Priya Sharma, Age 26<br>
+      <strong style="color:var(--text)">Date:</strong> February 27, 2025<br><br>
+      <strong style="color:var(--text)">Reported symptoms (last 90 days):</strong><br>
+      • Post-coital spotting × 2 (Feb 14, Feb 24 — moderate severity)<br>
+      • Pelvic pain × 3 (mild to moderate, primarily luteal phase)<br>
+      • Unusual discharge × 1 (Feb 18)<br><br>
+      <strong style="color:var(--text)">Screening history:</strong><br>
+      • Last Pap smear: March 2022 (overdue)<br>
+      • HPV DNA test: never done<br>
+      • HPV vaccination: none initiated<br><br>
+      <strong style="color:var(--text)">Suggested discussion points:</strong><br>
+      • Cervical examination + repeat Pap smear<br>
+      • HPV DNA co-test if available<br>
+      • Discuss HPV vaccination schedule<br><br>
+      <em style="font-size:11px;color:var(--text3)">⚕️ Generated by CervixCare+. Not a clinical record. For discussion purposes only. Does not constitute a diagnosis.</em>
+    </div>
+    <button class="btn-primary" onclick="closeModal('modal-doc-note');showToast('📋 Note copied to clipboard!')">Copy to Clipboard</button>
+    <button class="btn-secondary" style="margin-top:10px" onclick="closeModal('modal-doc-note');showToast('📥 Saving as PDF...')">Save as PDF</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const screenNavMap={'screen-home':'nav-home','screen-cycle':'nav-cycle','screen-symptoms':'nav-symptoms','screen-insights':'nav-insights','screen-screening':'nav-screening','screen-reports':'nav-reports','screen-profile':'nav-profile'};
+
+function goOb(s){document.querySelectorAll('.onboard-screen').forEach(x=>x.classList.remove('active'));document.getElementById('ob-'+s).classList.add('active')}
+function launchApp(){
+  document.querySelectorAll('.onboard-screen').forEach(s=>{s.style.transition='opacity 0.4s';s.style.opacity='0';setTimeout(()=>s.style.display='none',400)});
+  setTimeout(()=>{document.getElementById('main-app').style.display='flex';animateBars()},350)
+}
+function sel(el,g){el.closest('.choice-grid').querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
+function navTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const t=document.getElementById(id);if(t){t.classList.add('active');t.scrollTo(0,0)}
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const nid=screenNavMap[id];if(nid)document.getElementById(nid).classList.add('active')
+}
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){const m=document.getElementById(id);m.querySelector('.modal-sheet').style.transform='translateY(100%)';setTimeout(()=>{m.classList.remove('open');m.querySelector('.modal-sheet').style.transform=''},250)}
+function tapLog(id,msg){const b=document.getElementById(id);b.classList.toggle('logged');showToast(b.classList.contains('logged')?msg:'Entry removed')}
+function logSym(){closeModal('modal-log');showToast('✓ Symptom logged. Pattern analysis updated.')}
+function selSev(el){el.closest('.severity-row').querySelectorAll('.sev-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
+function selMood(el){el.closest('.mood-row').querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');showToast('Mood logged ✓')}
+
+let toastTimer;
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2800)}
+
+function animateBars(){
+  setTimeout(()=>{document.querySelectorAll('.prog-fill').forEach(el=>{const w=el.style.width;el.style.width='0';setTimeout(()=>el.style.width=w,80)})},300)
+}
+
+function sendChat(){
+  const inp=document.getElementById('chat-in');const msg=inp.value.trim();if(!msg)return;
+  const area=document.getElementById('chat-area');
+  const uBubble=document.createElement('div');uBubble.className='bubble bubble-user';uBubble.textContent=msg;
+  area.appendChild(uBubble);inp.value='';area.scrollTop=area.scrollHeight;
+  setTimeout(()=>{
+    const aiBubble=document.createElement('div');aiBubble.className='bubble bubble-ai';
+    const responses=["I can see from your data that this symptom appears during the "+["luteal","menstrual","follicular"][Math.floor(Math.random()*3)]+" phase. This is helpful context for your doctor visit. Shall I add it to your clinician note?","Based on your last 3 cycles, this pattern has been consistent. It's worth discussing with your gynaecologist — want me to prepare a discussion note?","Your data doesn't suggest an immediate concern, but logging consistently for one more month will help detect a clearer pattern. Keep tracking!","That's a great question. Based on WHO guidelines for your age group, the recommendation would be to discuss this at your next screening appointment."];
+    aiBubble.innerHTML='<div class="bubble-ai-name">CervixCare AI</div>'+responses[Math.floor(Math.random()*responses.length)];
+    area.appendChild(aiBubble);area.scrollTop=area.scrollHeight;
+  },800)
+}
+</script>
+</body>
+</html>
